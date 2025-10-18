@@ -9,6 +9,8 @@ https://transfert-thermiques-tp1-itnpjpm7nfz8rwznxxfnbg.streamlit.app/
 
 # Visualisation en local
 ## Installer les librairies
+Téléchager les fichiers 
+<br>
 Dans votre terminal :
 ```
 pip install -r requirements.txt
@@ -30,6 +32,7 @@ streamlit run main.py
 
 
 ![Texte alternatif](pictures/appstreamlit.png)
+
 
 
 
