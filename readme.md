@@ -8,7 +8,7 @@ https://transfert-thermiques-tp1-itnpjpm7nfz8rwznxxfnbg.streamlit.app/
 <br><br>
 
 # Visualisation en local
-1 - Téléchager les fichiers dans un dossier 
+1 - Téléchager les fichiers dans un dossier  <br>
 2 - Ouvrer le dossier dans votre éditeur python
 
 <br>
@@ -35,6 +35,7 @@ streamlit run main.py
 
 
 ![Texte alternatif](pictures/appstreamlit.png)
+
 
 
 
