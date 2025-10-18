@@ -1,12 +1,13 @@
 # TP1 Adell - Mrad
 <br><br>
 
-
+# Visualisation en ligne
 https://transfert-thermiques-tp1-itnpjpm7nfz8rwznxxfnbg.streamlit.app/
 
 
 <br><br>
 
+# Visualisation en local
 ## Installer les librairies
 Dans votre terminal :
 ```
@@ -29,6 +30,7 @@ streamlit run main.py
 
 
 ![Texte alternatif](pictures/appstreamlit.png)
+
 
 
 
