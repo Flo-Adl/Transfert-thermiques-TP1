@@ -6,9 +6,6 @@ import matplotlib.pyplot as plt
 import imageio.v2 as imageio
 from io import BytesIO
 
-# -------------------------------------
-# Utilitaire : conversion figure -> ndarray (robuste Cloud)
-# -------------------------------------
 def _fig_to_ndarray(fig):
     buf = BytesIO()
     fig.savefig(buf, format="png", bbox_inches="tight", dpi=fig.dpi)
@@ -202,3 +199,4 @@ with right:
         "- λ : conductivité thermique (W/m·K)\n"
         "Forme simplifiée utilisée : (∂T/∂t) = α · [(∂²T/∂x²) + (∂²T/∂y²)] avec α = λ / (ρ·c)"
     )
+
