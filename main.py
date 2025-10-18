@@ -1,5 +1,7 @@
 import streamlit as st
 import numpy as np
+import matplotlib
+matplotlib.use("Agg")  # backend sans interface graphique pour permettre l'hebergement en ligne
 import matplotlib.pyplot as plt
 import imageio.v2 as imageio
 from io import BytesIO
