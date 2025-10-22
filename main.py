@@ -4,8 +4,12 @@ import matplotlib
 matplotlib.use("Agg")  # backend sans interface graphique pour l’hébergement
 import matplotlib.pyplot as plt
 import imageio.v2 as imageio
+import plotly.graph_objects as go
 from io import BytesIO
 
+# -------------------------------------
+# Utilitaire : conversion figure -> ndarray (robuste Cloud)
+# -------------------------------------
 def _fig_to_ndarray(fig):
     buf = BytesIO()
     fig.savefig(buf, format="png", bbox_inches="tight", dpi=fig.dpi)
@@ -47,6 +51,35 @@ def solve_heat_2d_stable(n, dx, alpha, dt, n_steps,
         if (k % snapshot_every == 0) or (k == n_steps - 1):
             snaps.append(T.copy())
     return np.stack(snaps, axis=0), dt
+
+
+# -------------------------------------
+#              Courbes
+# -------------------------------------
+def courbe_1d(x, T, dt):
+    fig1 = go.Figure()
+    fig1.add_trace(go.Scatter(x=x, y=T[-1, :], mode="lines", line=dict(color="red", width=3)))
+    fig1.update_layout(
+        xaxis_title="Longueur L (m)",
+        yaxis_title="Température (°C)",
+        template="simple_white"
+    )
+    return fig1
+
+
+def courbe_2d(x, Tstack):
+    Tfinal = Tstack[-1]
+    n = Tfinal.shape[0]
+    mid = n // 2
+    fig2 = go.Figure()
+    fig2.add_trace(go.Scatter(x=x, y=Tfinal[mid, :], mode="lines", name="Courbe sur le plan X", line=dict(color="red", width=3)))
+    fig2.add_trace(go.Scatter(x=x, y=Tfinal[:, mid], mode="lines", name="Courbe sur le plan Y ", line=dict(color="orange", width=3)))
+    fig2.update_layout(
+        xaxis_title="Longueur L (m)",
+        yaxis_title="Température (°C)",
+        template="simple_white"
+    )
+    return fig2
 
 # -------------------------------------
 #              Heatmaps
@@ -172,31 +205,31 @@ gif2d = heatmap_gif_2d(T2_stack, dt_between_frames=dt2 * snap_every, duration=DU
 
 # Affichage
 left, right = st.columns((1, 1))
-with left:
-    st.subheader("1D :")
-    st.image(gif1d)
-    st.download_button("Télécharger GIF 1D", data=gif1d, file_name="diffusion_1D.gif", mime="image/gif")
-    st.markdown("<br>" * 2, unsafe_allow_html=True)
-    st.subheader("Équation de la chaleur en 1D :")
-    st.write(
-        "ρ · c · (∂T/∂t) = λ · (∂²T/∂x²)\n\n"
-        "- ρ : masse volumique du matériau (kg/m³)\n"
-        "- c : capacité thermique massique (J/kg·K)\n"
-        "- λ : conductivité thermique (W/m·K)\n"
-        "Forme simplifiée utilisée : (∂T/∂t) = α · (∂²T/∂x²) avec α = λ / (ρ·c)"
-    )
-
-with right:
-    st.subheader("2D :")
-    st.image(gif2d)
-    st.download_button("Télécharger GIF 2D", data=gif2d, file_name="diffusion_2D.gif", mime="image/gif")
-    st.markdown("<br>" * 2, unsafe_allow_html=True)
-    st.subheader("Équation de la chaleur en 2D :")
-    st.write(
-        "ρ · c · (∂T/∂t) = λ · [(∂²T/∂x²) + (∂²T/∂y²)]\n\n"
-        "- ρ : masse volumique du matériau (kg/m³)\n"
-        "- c : capacité thermique massique (J/kg·K)\n"
-        "- λ : conductivité thermique (W/m·K)\n"
-        "Forme simplifiée utilisée : (∂T/∂t) = α · [(∂²T/∂x²) + (∂²T/∂y²)] avec α = λ / (ρ·c)"
-    )
-
+left.subheader("1D :")
+left.image(gif1d)
+left.download_button("Télécharger GIF 1D", data=gif1d, file_name="diffusion_1D.gif", mime="image/gif")
+left.markdown("<br>" * 2, unsafe_allow_html=True)
+left.subheader(" Équation de la chaleur en 1D :")
+left.plotly_chart(courbe_1d(x, T1, delta_t), use_container_width=True)
+left.markdown("<br>" * 1, unsafe_allow_html=True)
+left.write(
+    "ρ · c · (∂T/∂t) = λ · (∂²T/∂x²)\n\n"
+    "- ρ : masse volumique du matériau (kg/m³)\n"
+    "- c : capacité thermique massique (J/kg·K)\n"
+    "- λ : conductivité thermique (W/m·K)\n"
+    ": (∂T/∂t) = α · (∂²T/∂x²) avec α = λ / (ρ·c)"
+)
+right.subheader("2D :")
+right.image(gif2d)
+right.download_button("Télécharger GIF 2D", data=gif2d, file_name="diffusion_2D.gif", mime="image/gif")
+right.markdown("<br>" * 2, unsafe_allow_html=True)
+right.subheader(" Équation de la chaleur en 2D :")
+right.plotly_chart(courbe_2d(x, T2_stack), use_container_width=True)
+right.markdown("<br>" * 1, unsafe_allow_html=True)
+right.write(
+    "ρ · c · (∂T/∂t) = λ · [(∂²T/∂x²) + (∂²T/∂y²)]\n\n"
+    "- ρ : masse volumique du matériau (kg/m³)\n"
+    "- c : capacité thermique massique (J/kg·K)\n"
+    "- λ : conductivité thermique (W/m·K)\n"
+    ": (∂T/∂t) = α · [(∂²T/∂x²) + (∂²T/∂y²)] avec α = λ / (ρ·c)"
+)
