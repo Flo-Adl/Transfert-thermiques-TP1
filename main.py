@@ -66,7 +66,6 @@ def courbe_1d(x, T, dt):
     )
     return fig1
 
-
 def courbe_2d(x, Tstack):
     Tfinal = Tstack[-1]
     n = Tfinal.shape[0]
@@ -233,3 +232,4 @@ right.write(
     "- λ : conductivité thermique (W/m·K)\n"
     ": (∂T/∂t) = α · [(∂²T/∂x²) + (∂²T/∂y²)] avec α = λ / (ρ·c)"
 )
+
